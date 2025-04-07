@@ -2,32 +2,46 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import mysql.connector
 import os
+import logging
+
+# Setup logging for debugging
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
-CORS(app)  # ✅ Add this to allow CORS
+CORS(app)
 
+# Database configuration from environment variables
 db_config = {
     'host': os.getenv('DB_HOST'),
     'user': os.getenv('DB_USER'),
     'password': os.getenv('DB_PASSWORD'),
     'database': os.getenv('DB_NAME'),
-    'port': int(os.getenv('DB_PORT', 3306))  # Fallback to 3306 if not set
+    'port': int(os.getenv('DB_PORT', 3306))  # Default to 3306
 }
 
 @app.route('/check_user', methods=['POST'])
 def check_user():
     data = request.get_json()
 
-    if 'username' not in data:
+    if not data or 'username' not in data:
         return jsonify({'message': 'Username is required'}), 400
 
-    username = data['username']
+    username = data['username'].strip()
+
+    if not username:
+        return jsonify({'message': 'Invalid username'}), 400
+
+    connection = None
+    cursor = None
 
     try:
+        # Connect to database
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor(dictionary=True)
 
-        cursor.execute("SELECT link FROM user_credentials WHERE user_name = %s", (username,))
+        # Fetch user
+        query = "SELECT link FROM user_credentials WHERE user_name = %s"
+        cursor.execute(query, (username,))
         result = cursor.fetchone()
 
         if result:
@@ -36,13 +50,19 @@ def check_user():
             return jsonify({'exists': False})
 
     except mysql.connector.Error as err:
-        return jsonify({'message': str(err)}), 500
+        logging.error(f"MySQL Error: {err}")
+        return jsonify({'message': 'Database error: ' + str(err)}), 500
+
+    except Exception as e:
+        logging.exception("Unexpected error occurred")
+        return jsonify({'message': 'Internal server error'}), 500
 
     finally:
-        if cursor:
+        if cursor is not None:
             cursor.close()
-        if connection:
+        if connection is not None:
             connection.close()
 
 if __name__ == '__main__':
+    # Use port 10000 as specified
     app.run(host='0.0.0.0', port=10000)
