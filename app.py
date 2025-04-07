@@ -10,12 +10,19 @@ logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
 CORS(app)
 
+# Host: sql12.freesqldatabase.com
+# Database name: sql12771518
+# Database user: sql12771518
+# Database password: RARPZ8uhWN
+# Port number: 3306
+
+
 # Database configuration from environment variables
 db_config = {
-    'host': os.getenv('DB_HOST'),
-    'user': os.getenv('DB_USER'),
-    'password': os.getenv('DB_PASSWORD'),
-    'database': os.getenv('DB_NAME'),
+    'host': os.getenv('sql12.freesqldatabase.com'),
+    'user': os.getenv('sql12771518'),
+    'password': os.getenv('RARPZ8uhWN'),
+    'database': os.getenv('sql12771518'),
     'port': int(os.getenv('DB_PORT', 3306))  # Default to 3306
 }
 
