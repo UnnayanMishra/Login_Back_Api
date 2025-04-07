@@ -19,12 +19,13 @@ CORS(app)
 
 # Database configuration from environment variables
 db_config = {
-    'host': os.getenv('sql12.freesqldatabase.com'),
-    'user': os.getenv('sql12771518'),
-    'password': os.getenv('RARPZ8uhWN'),
-    'database': os.getenv('sql12771518'),
-    'port': int(os.getenv('DB_PORT', 3306))  # Default to 3306
+    'host': 'sql12.freesqldatabase.com',
+    'user': 'sql12771518',
+    'password': 'RARPZ8uhWN',
+    'database': 'sql12771518',
+    'port': 3306  # Default MySQL port
 }
+
 
 @app.route('/check_user', methods=['POST'])
 def check_user():
