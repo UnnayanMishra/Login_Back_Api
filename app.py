@@ -1,33 +1,32 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import mysql.connector
+import os
 
 app = Flask(__name__)
+CORS(app)  # ✅ Add this to allow CORS
 
-# Database config
 db_config = {
-    'host': 'sql12.freesqldatabase.com',
-    'user': 'sql12771518',
-    'password': 'RARPZ8uhWN',
-    'database': 'sql12771518',
-    'port': 3306
+    'host': os.getenv('DB_HOST'),
+    'user': os.getenv('DB_USER'),
+    'password': os.getenv('DB_PASSWORD'),
+    'database': os.getenv('DB_NAME'),
+    'port': int(os.getenv('DB_PORT', 3306))  # Fallback to 3306 if not set
 }
 
 @app.route('/check_user', methods=['POST'])
 def check_user():
     data = request.get_json()
 
-    # Validate input
     if 'username' not in data:
-        return jsonify({'error': 'Username is required'}), 400
+        return jsonify({'message': 'Username is required'}), 400
 
     username = data['username']
 
     try:
-        # Connect to database
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor(dictionary=True)
 
-        # Query for user
         cursor.execute("SELECT link FROM user_credentials WHERE user_name = %s", (username,))
         result = cursor.fetchone()
 
@@ -37,7 +36,7 @@ def check_user():
             return jsonify({'exists': False})
 
     except mysql.connector.Error as err:
-        return jsonify({'error': str(err)}), 500
+        return jsonify({'message': str(err)}), 500
 
     finally:
         if cursor:
@@ -47,4 +46,3 @@ def check_user():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
-
