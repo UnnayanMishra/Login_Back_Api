@@ -10,19 +10,19 @@ logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
 CORS(app)
 
-# Host: sql12.freesqldatabase.com
-# Database name: sql12771518
-# Database user: sql12771518
-# Database password: RARPZ8uhWN
-# Port number: 3306
+# Host: sql12.freesqldatabase.com
+# Database name: sql12773179
+# Database user: sql12773179
+# Database password: W8lWH92EGm
+# Port number: 3306
 
 
 # Database configuration from environment variables
 db_config = {
     'host': 'sql12.freesqldatabase.com',
-    'user': 'sql12771518',
-    'password': 'RARPZ8uhWN',
-    'database': 'sql12771518',
+    'user': 'sql12773179',
+    'password': 'W8lWH92EGm',
+    'database': 'sql12773179',
     'port': 3306  # Default MySQL port
 }
 

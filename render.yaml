@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: flask-api
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python app.py"
+    plan: free
+    envVars:
+      - key: DB_HOST
+        value: sql12.freesqldatabase.com
+      - key: DB_USER
+        value: sql12771518
+      - key: DB_PASSWORD
+        value: RARPZ8uhWN
+      - key: DB_NAME
+        value: sql12771518
+      - key: DB_PORT
+        value: 3306
