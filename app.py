@@ -26,7 +26,7 @@ db_config = {
     'port': 3306  # Default MySQL port
 }
 db_config_1 = {
-    "table" = 'Tesseract'
+    'table' = 'Tesseract'
 }
 
 @app.route('/check_user', methods=['POST'])
