@@ -25,7 +25,9 @@ db_config = {
     'database': 'sql12773179',
     'port': 3306  # Default MySQL port
 }
-
+db_config_1 = {
+    "table" = 'Tesseract'
+}
 
 @app.route('/check_user', methods=['POST'])
 def check_user():
@@ -48,7 +50,8 @@ def check_user():
         cursor = connection.cursor(dictionary=True)
 
         # Fetch user
-        query = "SELECT link FROM user_credentials WHERE user_name = %s"
+        table_name = db_config_1['table']
+        query = f"SELECT link FROM {table_name} WHERE user_name = %s"
         cursor.execute(query, (username,))
         result = cursor.fetchone()
 
